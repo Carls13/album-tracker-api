@@ -10,8 +10,11 @@ const registerUser = (userData) => {
         try {
             const userWithEmail = await userStore.findUserByEmail(userData.email);
 
-            if (userWithEmail) reject("Email already used");
-
+            if (userWithEmail) {
+                reject("Email already used");
+                return;
+            }
+            
             const allSections = await sectionStore.listAll();
 
             let emptyStickersData = {};
@@ -50,7 +53,21 @@ const login = (email, password) => {
     });
 }
 
+const getUserDetails = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await userStore.getUserDetails(email);
+
+            resolve(user);
+        } catch (e) {
+            reject(e.message);
+        } 
+    })
+  
+}
+
 module.exports = {
     registerUser,
     login,
+    getUserDetails,
 };

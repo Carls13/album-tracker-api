@@ -1,7 +1,21 @@
 const express = require("express");
 const { success, error } = require("../../network/response");
+const { verifyToken } = require("../../utils/token");
 const router = express.Router();
 const controller = require("./controller");
+
+router.get(
+  "/details",
+  verifyToken,
+  (req, res) => {
+    const { user } = req;
+
+    controller
+      .getUserDetails(user.email)
+      .then((data) => success(req, res, data, 200))
+      .catch((errorMessage) => error(req, res, errorMessage, 500));
+  }
+);
 
 router.post(
   "/",

@@ -20,7 +20,14 @@ const findUserByEmail = async (email) => {
     return user;
 };
 
+const getUserDetails = async (email) => {
+    const user = await userModel.findOne({ email }).select('email username country stickers duplicates').exec();
+
+    return user;
+};
+
 module.exports = {
     addUser,
     findUserByEmail,
+    getUserDetails,
 };
