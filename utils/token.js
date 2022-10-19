@@ -1,20 +1,20 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config');
-const { error } = require('../network/response');
+const jwt = require("jsonwebtoken");
+const config = require("../config");
+const { error } = require("../network/response");
 
 const generateToken = (userData) => {
-    const token = jwt.sign(
-        {
-          email: userData.email,
-          id: userData._id,
-        },
-        config.tokenKey,
-        {
-          expiresIn: "1h",
-        }
-      );
+  const token = jwt.sign(
+    {
+      email: userData.email,
+      id: userData._id,
+    },
+    config.tokenKey,
+    {
+      expiresIn: "1h",
+    }
+  );
 
-    return token;
+  return token;
 };
 
 const verifyToken = (req, res, next) => {
@@ -35,7 +35,7 @@ const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, config.tokenKey);
     req.user = decoded;
   } catch (err) {
-    error(req, res, "A token is required for authentication", 403);
+    error(req, res, "Invalid token", 401);
     return;
   }
   return next();
